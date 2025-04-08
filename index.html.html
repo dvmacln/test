@@ -1,0 +1,126 @@
+<div id="embedded-filterable-table">
+  <style>
+    #embedded-filterable-table {
+      font-family: Arial, sans-serif;
+      background-color: #f3f6fc;
+      color: #333;
+      padding: 20px;
+      border-radius: 10px;
+    }
+    #embedded-filterable-table h2 {
+      text-align: center;
+      color: #4c6ef5;
+    }
+    #embedded-filterable-table .filters {
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    #embedded-filterable-table .filters select {
+      padding: 10px;
+      font-size: 16px;
+      margin: 0 15px;
+      border-radius: 5px;
+      border: 1px solid #4c6ef5;
+      background-color: #e0e6fa;
+    }
+    #embedded-filterable-table .filters select:focus {
+      border-color: #8c4eff;
+      outline: none;
+    }
+    #embedded-filterable-table table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 0 auto;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    #embedded-filterable-table table, 
+    #embedded-filterable-table th, 
+    #embedded-filterable-table td {
+      border: 1px solid #8c4eff;
+    }
+    #embedded-filterable-table th, 
+    #embedded-filterable-table td {
+      padding: 12px;
+      text-align: left;
+    }
+    #embedded-filterable-table th {
+      background-color: #4c6ef5;
+      color: white;
+    }
+    #embedded-filterable-table tbody tr:nth-child(odd) {
+      background-color: #f0f4ff;
+    }
+    #embedded-filterable-table tbody tr:nth-child(even) {
+      background-color: #d6dfff;
+    }
+    #embedded-filterable-table tbody tr:hover {
+      background-color: #b3bfff;
+    }
+  </style>
+
+  <h2>Filterable Kids Classes</h2>
+
+  <div class="filters">
+    <label for="age-filter">Age: </label>
+    <select id="age-filter">
+      <option value="">All Ages</option>
+      <option value="5-7">5-7 years</option>
+      <option value="8-10">8-10 years</option>
+      <option value="11-13">11-13 years</option>
+    </select>
+
+    <label for="location-filter">Location: </label>
+    <select id="location-filter">
+      <option value="">All Locations</option>
+      <option value="New York">New York</option>
+      <option value="Los Angeles">Los Angeles</option>
+      <option value="Chicago">Chicago</option>
+    </select>
+  </div>
+
+  <table id="classes-table">
+    <thead>
+      <tr>
+        <th>Class Name</th>
+        <th>Age Group</th>
+        <th>Location</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Dance Class</td><td>5-7 years</td><td>New York</td></tr>
+      <tr><td>Swimming</td><td>8-10 years</td><td>Los Angeles</td></tr>
+      <tr><td>Yoga</td><td>11-13 years</td><td>Chicago</td></tr>
+      <tr><td>Art Class</td><td>5-7 years</td><td>Chicago</td></tr>
+      <tr><td>Soccer</td><td>8-10 years</td><td>New York</td></tr>
+      <tr><td>Coding</td><td>11-13 years</td><td>Los Angeles</td></tr>
+      <tr><td>Basketball</td><td>8-10 years</td><td>Chicago</td></tr>
+    </tbody>
+  </table>
+
+  <script>
+    (function() {
+      const container = document.getElementById('embedded-filterable-table');
+      const ageFilter = container.querySelector('#age-filter');
+      const locationFilter = container.querySelector('#location-filter');
+      const table = container.querySelector('#classes-table');
+      const rows = table.querySelectorAll('tbody tr');
+
+      function filterTable() {
+        const ageValue = ageFilter.value.toLowerCase();
+        const locationValue = locationFilter.value.toLowerCase();
+
+        rows.forEach(row => {
+          const age = row.cells[1].textContent.toLowerCase();
+          const location = row.cells[2].textContent.toLowerCase();
+          const matchesAge = ageValue === '' || age.includes(ageValue);
+          const matchesLocation = locationValue === '' || location.includes(locationValue);
+          row.style.display = (matchesAge && matchesLocation) ? '' : 'none';
+        });
+      }
+
+      ageFilter.addEventListener('change', filterTable);
+      locationFilter.addEventListener('change', filterTable);
+      filterTable();
+    })();
+  </script>
+</div>
