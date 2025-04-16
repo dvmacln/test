@@ -1,9 +1,52 @@
 <div id="embedded-filterable-table">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Varela+Round&display=swap');
+
+    #embedded-filterable-table {
+      font-family: 'Varela Round', sans-serif;
+      color: #2a8ac7;
+      padding: 20px;
+    }
+    #embedded-filterable-table h2 {
+      text-align: center;
+      color: #2a8ac7;
+    }
+    #embedded-filterable-table .filters {
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    #embedded-filterable-table .filters label {
+      margin: 0 10px;
+    }
+    #embedded-filterable-table .filters select {
+      padding: 8px;
+      font-size: 16px;
+      margin: 0 10px;
+    }
+    #embedded-filterable-table .filters input[type="checkbox"] {
+      margin-right: 5px;
+    }
+    #embedded-filterable-table table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    #embedded-filterable-table th, 
+    #embedded-filterable-table td {
+      border: 1px solid #2a8ac7;
+      padding: 10px;
+      text-align: left;
+    }
+    #embedded-filterable-table th {
+      background-color: #2a8ac7;
+      color: white;
+    }
+  </style>
 
   <h2>Filterable Kids Classes</h2>
 
   <div class="filters">
-    <label for="age-filter">Age: </label>
+    <label for="age-filter">Age:</label>
     <select id="age-filter">
       <option value="">All Ages</option>
       <option value="5-7">5-7 years</option>
@@ -11,15 +54,15 @@
       <option value="11-13">11-13 years</option>
     </select>
 
-    <fieldset id="location-filter">
-      <legend>Select Locations:</legend>
-      <label><input type="checkbox" value="New York"> New York</label>
-      <label><input type="checkbox" value="Los Angeles"> Los Angeles</label>
-      <label><input type="checkbox" value="Chicago"> Chicago</label>
+    <fieldset style="display:inline-block; border:none;">
+      <legend style="margin-bottom:5px;">Location:</legend>
+      <label><input type="checkbox" name="location" value="New York"> New York</label>
+      <label><input type="checkbox" name="location" value="Los Angeles"> Los Angeles</label>
+      <label><input type="checkbox" name="location" value="Chicago"> Chicago</label>
     </fieldset>
   </div>
 
-  <table id="classes-table" border="1">
+  <table id="classes-table">
     <thead>
       <tr>
         <th>Class Name</th>
@@ -42,31 +85,30 @@
     (function() {
       const container = document.getElementById('embedded-filterable-table');
       const ageFilter = container.querySelector('#age-filter');
-      const locationCheckboxes = container.querySelectorAll('#location-filter input[type="checkbox"]');
+      const checkboxes = container.querySelectorAll('input[name="location"]');
       const table = container.querySelector('#classes-table');
       const rows = table.querySelectorAll('tbody tr');
 
-      function getCheckedLocations() {
-        return Array.from(locationCheckboxes)
-          .filter(checkbox => checkbox.checked)
-          .map(checkbox => checkbox.value.toLowerCase());
-      }
-
       function filterTable() {
         const ageValue = ageFilter.value.toLowerCase();
-        const selectedLocations = getCheckedLocations();
+
+        const selectedLocations = Array.from(checkboxes)
+          .filter(cb => cb.checked)
+          .map(cb => cb.value.toLowerCase());
 
         rows.forEach(row => {
           const age = row.cells[1].textContent.toLowerCase();
           const location = row.cells[2].textContent.toLowerCase();
+
           const matchesAge = ageValue === '' || age.includes(ageValue);
           const matchesLocation = selectedLocations.length === 0 || selectedLocations.includes(location);
+
           row.style.display = (matchesAge && matchesLocation) ? '' : 'none';
         });
       }
 
       ageFilter.addEventListener('change', filterTable);
-      locationCheckboxes.forEach(checkbox => checkbox.addEventListener('change', filterTable));
+      checkboxes.forEach(cb => cb.addEventListener('change', filterTable));
       filterTable();
     })();
   </script>
