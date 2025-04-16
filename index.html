@@ -5,23 +5,20 @@
     #embedded-filterable-table {
       font-family: 'Varela Round', sans-serif;
       color: #2a8ac7;
+      max-width: 75%;
       padding: 20px;
-    }
-    #embedded-filterable-table h2 {
-      text-align: center;
-      color: #2a8ac7;
     }
     #embedded-filterable-table .filters {
       margin-bottom: 20px;
-      text-align: center;
+      text-align: left;
     }
     #embedded-filterable-table .filters label {
-      margin: 0 10px;
+      margin-right: 10px;
     }
     #embedded-filterable-table .filters select {
       padding: 8px;
       font-size: 16px;
-      margin: 0 10px;
+      margin-right: 10px;
     }
     #embedded-filterable-table .filters input[type="checkbox"] {
       margin-right: 5px;
@@ -43,8 +40,6 @@
     }
   </style>
 
-  <h2>Filterable Kids Classes</h2>
-
   <div class="filters">
     <label for="age-filter">Age:</label>
     <select id="age-filter">
@@ -54,7 +49,7 @@
       <option value="11-13">11-13 years</option>
     </select>
 
-    <fieldset style="display:inline-block; border:none;">
+    <fieldset style="display:inline-block; border:none; vertical-align: top;">
       <legend style="margin-bottom:5px;">Location:</legend>
       <label><input type="checkbox" name="location" value="New York"> New York</label>
       <label><input type="checkbox" name="location" value="Los Angeles"> Los Angeles</label>
@@ -91,7 +86,6 @@
 
       function filterTable() {
         const ageValue = ageFilter.value.toLowerCase();
-
         const selectedLocations = Array.from(checkboxes)
           .filter(cb => cb.checked)
           .map(cb => cb.value.toLowerCase());
@@ -99,10 +93,8 @@
         rows.forEach(row => {
           const age = row.cells[1].textContent.toLowerCase();
           const location = row.cells[2].textContent.toLowerCase();
-
           const matchesAge = ageValue === '' || age.includes(ageValue);
           const matchesLocation = selectedLocations.length === 0 || selectedLocations.includes(location);
-
           row.style.display = (matchesAge && matchesLocation) ? '' : 'none';
         });
       }
