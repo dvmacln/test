@@ -1,144 +1,141 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Filterable Table</title>
-    <style>
-        /* Reset CSS */
-        body, html {
-            margin: 0;
-            padding: 0;
-            height: auto;
-            width: 100%;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Filterable Kids Classes</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: "VAG Rounded", "Verdana", sans-serif;
+      font-size: 14px;
+      color: #333;
+      overflow-x: hidden;
+    }
 
-        #embedded-filterable-table {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            width: 100%;
-        }
+    #embedded-filterable-table {
+      width: 100%;
+      max-width: 1200px;
+      padding: 1rem;
+      box-sizing: border-box;
+      overflow-x: auto;
+      margin-left: 0;
+    }
 
-        h2 {
-            font-size: 18px;
-            margin-bottom: 15px;
-        }
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      align-items: flex-start;
+    }
 
-        .filters {
-            margin-bottom: 20px;
-            text-align: left;
-        }
+    .filter-group {
+      display: flex;
+      flex-direction: column;
+    }
 
-        .filters label {
-            margin-right: 10px;
-            font-weight: bold;
-        }
+    .filter-group span {
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+      color: #2a8ac7;
+    }
 
-        .filters input[type="checkbox"] {
-            margin-right: 5px;
-        }
+    .checkboxes {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 0 auto;
-        }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.95em;
+    }
 
-        th, td {
-            padding: 8px;
-            text-align: left;
-            border: 1px solid #ccc;
-        }
+    th, td {
+      padding: 8px;
+      border: 1px solid #ccc;
+      text-align: left;
+    }
 
-        th {
-            background-color: #f4f4f4;
-        }
+    th {
+      background-color: #2a8ac7;
+      color: white;
+    }
 
-        tr:nth-child(odd) {
-            background-color: #f9f9f9;
-        }
-
-        tr:nth-child(even) {
-            background-color: #f0f0f0;
-        }
-
-        tr:hover {
-            background-color: #e0e0e0;
-        }
-    </style>
+    tbody tr:nth-child(odd) {
+      background-color: #f9f9f9;
+    }
+  </style>
 </head>
 <body>
-    <div id="embedded-filterable-table">
-        <h2>Filterable Kids Classes</h2>
-
-        <div class="filters">
-            <label for="age-filter">Age:</label>
-            <input type="checkbox" id="age-5-7"> 5-7 years
-            <input type="checkbox" id="age-8-10"> 8-10 years
-            <input type="checkbox" id="age-11-13"> 11-13 years
-            <br><br>
-
-            <label for="location-filter">Location:</label>
-            <input type="checkbox" id="location-new-york"> New York
-            <input type="checkbox" id="location-los-angeles"> Los Angeles
-            <input type="checkbox" id="location-chicago"> Chicago
+  <div id="embedded-filterable-table">
+    <div class="filters">
+      <div class="filter-group">
+        <span>Age</span>
+        <div class="checkboxes" id="age-filters">
+          <label><input type="checkbox" value="5-7 years"> 5–7 years</label>
+          <label><input type="checkbox" value="8-10 years"> 8–10 years</label>
+          <label><input type="checkbox" value="11-13 years"> 11–13 years</label>
         </div>
+      </div>
 
-        <table id="classes-table">
-            <thead>
-                <tr>
-                    <th>Class Name</th>
-                    <th>Age Group</th>
-                    <th>Location</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr><td>Dance Class</td><td>5-7 years</td><td>New York</td></tr>
-                <tr><td>Swimming</td><td>8-10 years</td><td>Los Angeles</td></tr>
-                <tr><td>Yoga</td><td>11-13 years</td><td>Chicago</td></tr>
-                <tr><td>Art Class</td><td>5-7 years</td><td>Chicago</td></tr>
-                <tr><td>Soccer</td><td>8-10 years</td><td>New York</td></tr>
-                <tr><td>Coding</td><td>11-13 years</td><td>Los Angeles</td></tr>
-                <tr><td>Basketball</td><td>8-10 years</td><td>Chicago</td></tr>
-            </tbody>
-        </table>
-
-        <script>
-            // Filtering logic
-            const ageCheckboxes = document.querySelectorAll('[id^="age-"]');
-            const locationCheckboxes = document.querySelectorAll('[id^="location-"]');
-            const rows = document.querySelectorAll('table tbody tr');
-
-            function filterTable() {
-                rows.forEach(row => {
-                    const age = row.cells[1].textContent.toLowerCase();
-                    const location = row.cells[2].textContent.toLowerCase();
-                    let showRow = true;
-
-                    ageCheckboxes.forEach(checkbox => {
-                        if (checkbox.checked && !age.includes(checkbox.id.split('-')[1])) {
-                            showRow = false;
-                        }
-                    });
-
-                    locationCheckboxes.forEach(checkbox => {
-                        if (checkbox.checked && !location.includes(checkbox.id.split('-')[1])) {
-                            showRow = false;
-                        }
-                    });
-
-                    row.style.display = showRow ? '' : 'none';
-                });
-            }
-
-            // Add event listeners to filters
-            ageCheckboxes.forEach(checkbox => checkbox.addEventListener('change', filterTable));
-            locationCheckboxes.forEach(checkbox => checkbox.addEventListener('change', filterTable));
-
-            // Initial filter
-            filterTable();
-        </script>
+      <div class="filter-group">
+        <span>Location</span>
+        <div class="checkboxes" id="location-filters">
+          <label><input type="checkbox" value="New York"> New York</label>
+          <label><input type="checkbox" value="Los Angeles"> Los Angeles</label>
+          <label><input type="checkbox" value="Chicago"> Chicago</label>
+        </div>
+      </div>
     </div>
+
+    <table id="classes-table">
+      <thead>
+        <tr>
+          <th>Class Name</th>
+          <th>Age Group</th>
+          <th>Location</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Dance Class</td><td>5-7 years</td><td>New York</td></tr>
+        <tr><td>Swimming</td><td>8-10 years</td><td>Los Angeles</td></tr>
+        <tr><td>Yoga</td><td>11-13 years</td><td>Chicago</td></tr>
+        <tr><td>Art Class</td><td>5-7 years</td><td>Chicago</td></tr>
+        <tr><td>Soccer</td><td>8-10 years</td><td>New York</td></tr>
+        <tr><td>Coding</td><td>11-13 years</td><td>Los Angeles</td></tr>
+        <tr><td>Basketball</td><td>8-10 years</td><td>Chicago</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    (function() {
+      const ageCheckboxes = document.querySelectorAll('#age-filters input[type="checkbox"]');
+      const locationCheckboxes = document.querySelectorAll('#location-filters input[type="checkbox"]');
+      const rows = document.querySelectorAll('#classes-table tbody tr');
+
+      function filterTable() {
+        const selectedAges = Array.from(ageCheckboxes).filter(cb => cb.checked).map(cb => cb.value);
+        const selectedLocations = Array.from(locationCheckboxes).filter(cb => cb.checked).map(cb => cb.value);
+
+        rows.forEach(row => {
+          const age = row.cells[1].textContent;
+          const location = row.cells[2].textContent;
+
+          const matchesAge = selectedAges.length === 0 || selectedAges.includes(age);
+          const matchesLocation = selectedLocations.length === 0 || selectedLocations.includes(location);
+
+          row.style.display = (matchesAge && matchesLocation) ? '' : 'none';
+        });
+      }
+
+      ageCheckboxes.forEach(cb => cb.addEventListener('change', filterTable));
+      locationCheckboxes.forEach(cb => cb.addEventListener('change', filterTable));
+    })();
+  </script>
 </body>
 </html>
