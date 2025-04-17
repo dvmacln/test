@@ -1,42 +1,40 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Embedded Filterable Table</title>
-  <link href="https://fonts.googleapis.com/css2?family=VAGRounded+Std&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <title>Filterable Table</title>
   <style>
     body {
-      font-family: 'VAG Rounded', 'VAGRounded Std', sans-serif;
+      font-family: "VAG Rounded", sans-serif;
       color: #2a8ac7;
-      margin: 0;
+      max-width: 1000px;
+      margin: 0 auto;
       padding: 20px;
-      width: 75%;
     }
 
     .filters {
       margin-bottom: 20px;
     }
 
-    .filters label {
-      margin-right: 10px;
-      font-size: 14px;
+    label {
+      display: block;
+      margin: 10px 0 5px;
     }
 
-    .filters select,
-    .filters input[type="checkbox"] {
-      margin-right: 15px;
+    select, input[type="text"] {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 15px;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 14px;
     }
 
     th, td {
-      border: 1px solid #2a8ac7;
-      padding: 8px;
+      border: 1px solid #ccc;
+      padding: 10px;
       text-align: left;
     }
 
@@ -48,79 +46,58 @@
 </head>
 <body>
 
-  <div class="filters">
-    <label for="age-filter">Age:</label>
-    <select id="age-filter">
-      <option value="">All Ages</option>
-      <option value="5-7">5-7 years</option>
-      <option value="8-10">8-10 years</option>
-      <option value="11-13">11-13 years</option>
-    </select>
+<div class="filters">
+  <label for="age-filter">Age</label>
+  <select id="age-filter">
+    <option value="">All Ages</option>
+    <option value="5-7">5-7 years</option>
+    <option value="8-10">8-10 years</option>
+    <option value="11-13">11-13 years</option>
+  </select>
 
-    <label>Location:</label>
-    <label><input type="checkbox" class="location-filter" value="New York">New York</label>
-    <label><input type="checkbox" class="location-filter" value="Los Angeles">Los Angeles</label>
-    <label><input type="checkbox" class="location-filter" value="Chicago">Chicago</label>
-  </div>
+  <label for="location-search">Search Location</label>
+  <input type="text" id="location-search" placeholder="Start typing a location...">
+</div>
 
-  <table id="classes-table">
-    <thead>
-      <tr>
-        <th>Class Name</th>
-        <th>Age Group</th>
-        <th>Location</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr><td>Dance Class</td><td>5-7 years</td><td>New York</td></tr>
-      <tr><td>Swimming</td><td>8-10 years</td><td>Los Angeles</td></tr>
-      <tr><td>Yoga</td><td>11-13 years</td><td>Chicago</td></tr>
-      <tr><td>Art Class</td><td>5-7 years</td><td>Chicago</td></tr>
-      <tr><td>Soccer</td><td>8-10 years</td><td>New York</td></tr>
-      <tr><td>Coding</td><td>11-13 years</td><td>Los Angeles</td></tr>
-      <tr><td>Basketball</td><td>8-10 years</td><td>Chicago</td></tr>
-    </tbody>
-  </table>
+<table id="classes-table">
+  <thead>
+    <tr>
+      <th>Class Name</th>
+      <th>Age Group</th>
+      <th>Location</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>Dance Class</td><td>5-7 years</td><td>New York</td></tr>
+    <tr><td>Swimming</td><td>8-10 years</td><td>Los Angeles</td></tr>
+    <tr><td>Yoga</td><td>11-13 years</td><td>Chicago</td></tr>
+    <tr><td>Art Class</td><td>5-7 years</td><td>Boston</td></tr>
+    <tr><td>Soccer</td><td>8-10 years</td><td>New York</td></tr>
+    <tr><td>Coding</td><td>11-13 years</td><td>San Francisco</td></tr>
+  </tbody>
+</table>
 
-  <script>
-    (function () {
-      const ageFilter = document.getElementById('age-filter');
-      const locationFilters = document.querySelectorAll('.location-filter');
-      const table = document.getElementById('classes-table');
-      const rows = table.querySelectorAll('tbody tr');
+<script>
+  const ageFilter = document.getElementById("age-filter");
+  const locationSearch = document.getElementById("location-search");
+  const rows = document.querySelectorAll("#classes-table tbody tr");
 
-      function filterTable() {
-        const ageValue = ageFilter.value.toLowerCase();
-        const selectedLocations = Array.from(locationFilters)
-          .filter(cb => cb.checked)
-          .map(cb => cb.value.toLowerCase());
+  function filterTable() {
+    const ageVal = ageFilter.value.toLowerCase();
+    const locVal = locationSearch.value.toLowerCase();
 
-        rows.forEach(row => {
-          const age = row.cells[1].textContent.toLowerCase();
-          const location = row.cells[2].textContent.toLowerCase();
+    rows.forEach(row => {
+      const age = row.cells[1].textContent.toLowerCase();
+      const loc = row.cells[2].textContent.toLowerCase();
+      const matchAge = !ageVal || age.includes(ageVal);
+      const matchLoc = !locVal || loc.includes(locVal);
+      row.style.display = (matchAge && matchLoc) ? "" : "none";
+    });
+  }
 
-          const matchesAge = !ageValue || age.includes(ageValue);
-          const matchesLocation = selectedLocations.length === 0 || selectedLocations.includes(location);
-
-          row.style.display = (matchesAge && matchesLocation) ? '' : 'none';
-        });
-      }
-
-      ageFilter.addEventListener('change', filterTable);
-      locationFilters.forEach(cb => cb.addEventListener('change', filterTable));
-      filterTable();
-    })();
-  </script>
-
-  <script>
-    function sendHeight() {
-      const height = document.body.scrollHeight;
-      parent.postMessage({ type: 'resize', height }, '*');
-    }
-
-    window.addEventListener('load', sendHeight);
-    window.addEventListener('resize', sendHeight);
-  </script>
+  ageFilter.addEventListener("change", filterTable);
+  locationSearch.addEventListener("input", filterTable);
+</script>
 
 </body>
 </html>
