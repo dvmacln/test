@@ -1,58 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Kids Classes</title>
+  <meta charset="UTF-8">
+  <title>Filterable Kids Classes</title>
   <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      font-family: "VAG Rounded", "VAG Rounded Std", "VAG Rundschrift", sans-serif;
+    body {
+      font-family: 'VAG Rounded', sans-serif;
       color: #2a8ac7;
-    }
-
-    #embedded-filterable-table {
+      margin: 40px;
+      max-width: 1200px;
       width: 75%;
-      padding: 20px;
     }
 
     .filters {
       margin-bottom: 20px;
     }
 
-    .filter-section {
-      margin-bottom: 15px;
+    .filter-group {
+      margin-bottom: 20px;
     }
 
-    .filter-section-title {
+    .filter-title {
       font-weight: bold;
-      font-size: 14px;
-      margin-bottom: 5px;
-      display: block;
+      margin-bottom: 8px;
     }
 
-    select {
-      font-size: 14px;
-      padding: 5px;
-      margin-top: 5px;
-    }
-
-    .checkbox-group label {
-      display: inline-block;
-      margin-right: 10px;
-      font-size: 14px;
+    .checkboxes {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 14px;
+      margin-top: 20px;
     }
 
     th, td {
-      border: 1px solid #ccc;
+      border: 1px solid #2a8ac7;
       padding: 8px;
       text-align: left;
     }
@@ -62,42 +48,31 @@
       color: white;
     }
 
-    tr:nth-child(odd) {
-      background-color: #f2faff;
-    }
-
-    tr:nth-child(even) {
-      background-color: #e5f3fb;
-    }
-
-    tr:hover {
-      background-color: #d3ecf9;
+    tbody tr:nth-child(even) {
+      background-color: #f0f8ff;
     }
   </style>
 </head>
 <body>
   <div id="embedded-filterable-table">
     <div class="filters">
-
-      <div class="filter-section">
-        <label class="filter-section-title" for="age-filter">Age</label>
-        <select id="age-filter">
-          <option value="">All Ages</option>
-          <option value="5-7">5-7 years</option>
-          <option value="8-10">8-10 years</option>
-          <option value="11-13">11-13 years</option>
-        </select>
-      </div>
-
-      <div class="filter-section">
-        <span class="filter-section-title">Location</span>
-        <div class="checkbox-group">
-          <label><input type="checkbox" class="location-filter" value="New York" checked /> New York</label>
-          <label><input type="checkbox" class="location-filter" value="Los Angeles" checked /> Los Angeles</label>
-          <label><input type="checkbox" class="location-filter" value="Chicago" checked /> Chicago</label>
+      <div class="filter-group">
+        <div class="filter-title">Age</div>
+        <div class="checkboxes" id="age-checkboxes">
+          <label><input type="checkbox" value="5-7"> 5–7 years</label>
+          <label><input type="checkbox" value="8-10"> 8–10 years</label>
+          <label><input type="checkbox" value="11-13"> 11–13 years</label>
         </div>
       </div>
 
+      <div class="filter-group">
+        <div class="filter-title">Location</div>
+        <div class="checkboxes" id="location-checkboxes">
+          <label><input type="checkbox" value="New York"> New York</label>
+          <label><input type="checkbox" value="Los Angeles"> Los Angeles</label>
+          <label><input type="checkbox" value="Chicago"> Chicago</label>
+        </div>
+      </div>
     </div>
 
     <table id="classes-table">
@@ -114,4 +89,42 @@
         <tr><td>Yoga</td><td>11-13 years</td><td>Chicago</td></tr>
         <tr><td>Art Class</td><td>5-7 years</td><td>Chicago</td></tr>
         <tr><td>Soccer</td><td>8-10 years</td><td>New York</td></tr>
-        <tr><td
+        <tr><td>Coding</td><td>11-13 years</td><td>Los Angeles</td></tr>
+        <tr><td>Basketball</td><td>8-10 years</td><td>Chicago</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    (function () {
+      const table = document.getElementById('classes-table');
+      const rows = table.querySelectorAll('tbody tr');
+
+      function getCheckedValues(containerId) {
+        return Array.from(document.querySelectorAll(`#${containerId} input:checked`)).map(cb => cb.value.toLowerCase());
+      }
+
+      function filterTable() {
+        const selectedAges = getCheckedValues('age-checkboxes');
+        const selectedLocations = getCheckedValues('location-checkboxes');
+
+        rows.forEach(row => {
+          const age = row.cells[1].textContent.toLowerCase();
+          const location = row.cells[2].textContent.toLowerCase();
+
+          const ageMatch = selectedAges.length === 0 || selectedAges.some(val => age.includes(val));
+          const locationMatch = selectedLocations.length === 0 || selectedLocations.some(val => location.includes(val));
+
+          row.style.display = ageMatch && locationMatch ? '' : 'none';
+        });
+      }
+
+      document.querySelectorAll('#age-checkboxes input, #location-checkboxes input').forEach(checkbox => {
+        checkbox.addEventListener('change', filterTable);
+      });
+
+      filterTable();
+    })();
+  </script>
+</body>
+</html>
