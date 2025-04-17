@@ -10,6 +10,7 @@
       margin: 40px;
       max-width: 1200px;
       width: 75%;
+      font-size: 14px; /* Smaller font size */
     }
 
     .filters {
@@ -23,6 +24,7 @@
     .filter-title {
       font-weight: bold;
       margin-bottom: 8px;
+      font-size: 16px; /* Smaller font size for titles */
     }
 
     .checkboxes {
@@ -35,12 +37,15 @@
       width: 100%;
       border-collapse: collapse;
       margin-top: 20px;
+      table-layout: fixed; /* Ensures the table does not overflow */
+      word-wrap: break-word;
     }
 
     th, td {
       border: 1px solid #2a8ac7;
-      padding: 8px;
+      padding: 6px;  /* Reduced padding for smaller text */
       text-align: left;
+      font-size: 14px;  /* Smaller text in table */
     }
 
     th {
