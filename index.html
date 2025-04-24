@@ -1,175 +1,123 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Children’s Activity Schedule</title>
-  <link href="https://fonts.googleapis.com/css2?family=Varela+Round&display=swap" rel="stylesheet" />
+  <meta charset="UTF-8">
+  <title>Filterable Kids Classes</title>
+  <link href="https://fonts.googleapis.com/css2?family=VAGRoundedStd&display=swap" rel="stylesheet">
   <style>
     body {
-      font-family: 'Varela Round', sans-serif;
-      margin: 2rem;
-      color: #333;
+      font-family: 'VAG Rounded', 'VAGRoundedStd', sans-serif;
+      font-size: 14px;
+      color: #2a8ac7;
+      margin: 0;
+      padding: 20px;
+    }
+    .filters {
+      margin-bottom: 20px;
+    }
+    .filter-group {
+      margin-bottom: 15px;
+    }
+    .filter-group strong {
+      display: block;
+      margin-bottom: 5px;
+    }
+    label {
+      margin-right: 15px;
+      display: inline-block;
+    }
+    input[type="checkbox"] {
+      margin-right: 5px;
     }
     table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 0.9rem;
+      margin-top: 10px;
+      table-layout: fixed;
     }
     th, td {
-      border: 1px solid #ddd;
+      border: 1px solid #2a8ac7;
       padding: 8px;
+      text-align: left;
+      word-wrap: break-word;
     }
     th {
       background-color: #2a8ac7;
       color: white;
-      text-align: left;
     }
-    .filter-section {
-      margin-bottom: 1rem;
+    tr:nth-child(even) {
+      background-color: #e5f1f8;
     }
-    .filter-group {
-      margin-bottom: 1rem;
-    }
-    .filter-label {
-      font-weight: bold;
-      margin-right: 1rem;
-      display: inline-block;
-      width: 80px;
-    }
-    .checkbox-group {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-    .checkbox-group label {
-      display: flex;
-      align-items: center;
-      gap: 4px;
+    tr:hover {
+      background-color: #c2e4f7;
     }
   </style>
 </head>
 <body>
-  <h1>Children’s Weekly Activities</h1>
 
-  <div class="filter-section">
+  <div class="filters">
     <div class="filter-group">
-      <span class="filter-label">Age:</span>
-      <div class="checkbox-group" id="age-filter">
-        <!-- Dynamically populated checkboxes -->
-      </div>
+      <strong>Age</strong>
+      <label><input type="checkbox" class="age-filter" value="5-7">5-7 years</label>
+      <label><input type="checkbox" class="age-filter" value="8-10">8-10 years</label>
+      <label><input type="checkbox" class="age-filter" value="11-13">11-13 years</label>
     </div>
     <div class="filter-group">
-      <span class="filter-label">Location:</span>
-      <div class="checkbox-group" id="location-filter">
-        <!-- Dynamically populated checkboxes -->
-      </div>
+      <strong>Location</strong>
+      <label><input type="checkbox" class="location-filter" value="New York">New York</label>
+      <label><input type="checkbox" class="location-filter" value="Los Angeles">Los Angeles</label>
+      <label><input type="checkbox" class="location-filter" value="Chicago">Chicago</label>
     </div>
   </div>
 
-  <table id="activity-table">
+  <table id="classes-table">
     <thead>
       <tr>
-        <th>Day</th>
-        <th>Activity</th>
-        <th>Time</th>
-        <th>Age</th>
-        <th>Type</th>
-        <th>Venue</th>
-        <th>Town</th>
+        <th>Class Name</th>
+        <th>Age Group</th>
+        <th>Location</th>
       </tr>
     </thead>
     <tbody>
-      <!-- DATA ROWS HERE -->
+      <tr><td>Dance Class</td><td>5-7 years</td><td>New York</td></tr>
+      <tr><td>Swimming</td><td>8-10 years</td><td>Los Angeles</td></tr>
+      <tr><td>Yoga</td><td>11-13 years</td><td>Chicago</td></tr>
+      <tr><td>Art Class</td><td>5-7 years</td><td>Chicago</td></tr>
+      <tr><td>Soccer</td><td>8-10 years</td><td>New York</td></tr>
+      <tr><td>Coding</td><td>11-13 years</td><td>Los Angeles</td></tr>
+      <tr><td>Basketball</td><td>8-10 years</td><td>Chicago</td></tr>
     </tbody>
   </table>
 
   <script>
-    const activities = [
-      {day:"Tuesday",activity:"Bambino bikes",time:"10:15 a.m. - 11:00 a.m.",age:"2 years - Preschool",type:"course",venue:"Cambuslang Institute",town:"Cambuslang"},
-      {day:"Tuesday",activity:"Go! Football",time:"11:15 a.m. - 12:00 p.m.",age:"3 years - Preschool",type:"course",venue:"Cambuslang Institute",town:"Cambuslang"},
-      {day:"Tuesday",activity:"Tiny Play",time:"12:30 p.m. - 2:00 p.m.",age:"Birth - Preschool",type:"course",venue:"Cambuslang Institute",town:"Cambuslang"},
-      {day:"Wednesday",activity:"Go! Dance",time:"11:30 a.m. - 12:15 p.m.",age:"3 years - Preschool",type:"course",venue:"Cambuslang Institute",town:"Cambuslang"},
-      {day:"Wednesday",activity:"Wee Play",time:"12:30 p.m. - 2:00 p.m.",age:"1 year - Preschool",type:"course",venue:"Cambuslang Institute",town:"Cambuslang"},
-      {day:"Thursday",activity:"Mini Movers",time:"9:15 a.m. - 10:00 a.m.",age:"1 year - 2 years",type:"course",venue:"Cambuslang Institute",town:"Cambuslang"},
-      {day:"Thursday",activity:"Mini Kickers",time:"10:15 a.m. - 11:00 a.m.",age:"2 years - 3 years",type:"course",venue:"Cambuslang Institute",town:"Cambuslang"},
-      {day:"Thursday",activity:"Go! Dance",time:"11:15 a.m. - 12:00 p.m.",age:"2 years - Preschool",type:"course",venue:"Cambuslang Institute",town:"Cambuslang"},
-      {day:"Friday",activity:"Go! Dance",time:"10:15 a.m. - 11:00 a.m.",age:"2 years - Preschool",type:"course",venue:"Cambuslang Institute",town:"Cambuslang"},
-      {day:"Friday",activity:"Tiny Play",time:"11:15 a.m. - 12:45 p.m.",age:"Birth - Preschool",type:"course",venue:"Cambuslang Institute",town:"Cambuslang"},
-      {day:"Friday",activity:"Wee Play",time:"1:00 p.m. - 2:30 p.m.",age:"1 year - Preschool",type:"course",venue:"Cambuslang Institute",town:"Cambuslang"},
-      {day:"Saturday",activity:"Go! Football",time:"9:30 a.m. - 10:15 a.m.",age:"3 years - Preschool",type:"course",venue:"Cambuslang Institute",town:"Cambuslang"},
-      {day:"Saturday",activity:"Go! Football",time:"10:30 a.m. - 11:15 a.m.",age:"Preschool - P1",type:"course",venue:"Cambuslang Institute",town:"Cambuslang"},
-      {day:"Saturday",activity:"Go! Football",time:"11:30 a.m. - 12:15 p.m.",age:"P1 - P3",type:"course",venue:"Cambuslang Institute",town:"Cambuslang"},
-      {day:"Saturday",activity:"Go! Football",time:"12:30 p.m. - 1:15 p.m.",age:"P4 - P7",type:"course",venue:"Cambuslang Institute",town:"Cambuslang"},
-      {day:"Monday",activity:"Go! Football",time:"3:45 p.m. - 4:30 p.m.",age:"P1 - P3",type:"session",venue:"Cambuslang Institute",town:"Cambuslang"},
-      {day:"Monday",activity:"Go! Football",time:"4:30 p.m. - 5:15 p.m.",age:"P4 - P7",type:"session",venue:"Cambuslang Institute",town:"Cambuslang"},
-      {day:"Tuesday",activity:"Tiny Play",time:"9:30 a.m. - 11:00 a.m.",age:"Birth - Preschool",type:"session",venue:"Halfway Community Centre",town:"Cambuslang"},
-      {day:"Tuesday",activity:"Tiny Play",time:"1:00 p.m. - 2:30 p.m.",age:"Birth - Preschool",type:"session",venue:"Whitlawburn Community Resource Centre",town:"Cambuslang"},
-      {day:"Wednesday",activity:"Wee Play",time:"1:00 p.m. - 2:30 p.m.",age:"1 year - Preschool",type:"session",venue:"Halfway Community Centre",town:"Cambuslang"}
-    ];
+    (function () {
+      const ageCheckboxes = document.querySelectorAll('.age-filter');
+      const locationCheckboxes = document.querySelectorAll('.location-filter');
+      const rows = document.querySelectorAll('#classes-table tbody tr');
 
-    const tbody = document.querySelector("#activity-table tbody");
+      function filterTable() {
+        const selectedAges = Array.from(ageCheckboxes)
+          .filter(cb => cb.checked)
+          .map(cb => cb.value.toLowerCase());
+        const selectedLocations = Array.from(locationCheckboxes)
+          .filter(cb => cb.checked)
+          .map(cb => cb.value.toLowerCase());
 
-    function renderTable(data) {
-      tbody.innerHTML = "";
-      data.forEach(item => {
-        const row = document.createElement("tr");
-        row.innerHTML = `
-          <td>${item.day}</td>
-          <td>${item.activity}</td>
-          <td>${item.time}</td>
-          <td>${item.age}</td>
-          <td>${item.type}</td>
-          <td>${item.venue}</td>
-          <td>${item.town}</td>
-        `;
-        tbody.appendChild(row);
-      });
-    }
+        rows.forEach(row => {
+          const age = row.cells[1].textContent.toLowerCase();
+          const location = row.cells[2].textContent.toLowerCase();
 
-    function renderFilters() {
-      const ageSet = new Set();
-      const locationSet = new Set();
-      activities.forEach(item => {
-        ageSet.add(item.age);
-        locationSet.add(item.town);
-      });
+          const matchAge = selectedAges.length === 0 || selectedAges.some(val => age.includes(val));
+          const matchLocation = selectedLocations.length === 0 || selectedLocations.includes(location);
 
-      const ageFilter = document.getElementById("age-filter");
-      const locationFilter = document.getElementById("location-filter");
+          row.style.display = (matchAge && matchLocation) ? '' : 'none';
+        });
+      }
 
-      ageSet.forEach(age => {
-        const label = document.createElement("label");
-        label.innerHTML = `<input type="checkbox" value="${age}" checked> ${age}`;
-        ageFilter.appendChild(label);
-      });
-
-      locationSet.forEach(loc => {
-        const label = document.createElement("label");
-        label.innerHTML = `<input type="checkbox" value="${loc}" checked> ${loc}`;
-        locationFilter.appendChild(label);
-      });
-    }
-
-    function getCheckedValues(groupId) {
-      return [...document.querySelectorAll(`#${groupId} input:checked`)].map(el => el.value);
-    }
-
-    function applyFilters() {
-      const selectedAges = getCheckedValues("age-filter");
-      const selectedLocations = getCheckedValues("location-filter");
-
-      const filtered = activities.filter(item =>
-        selectedAges.includes(item.age) && selectedLocations.includes(item.town)
-      );
-      renderTable(filtered);
-    }
-
-    document.getElementById("age-filter").addEventListener("change", applyFilters);
-    document.getElementById("location-filter").addEventListener("change", applyFilters);
-
-    renderFilters();
-    renderTable(activities);
+      ageCheckboxes.forEach(cb => cb.addEventListener('change', filterTable));
+      locationCheckboxes.forEach(cb => cb.addEventListener('change', filterTable));
+    })();
   </script>
+
 </body>
 </html>
