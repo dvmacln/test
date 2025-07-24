@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SLLC Membership Sign-Up</title>
+  <style>
+    body { font-family: Arial, sans-serif; background-color: #f0f4f8; margin: 0; padding: 20px; }
+    .container { max-width: 600px; margin: 40px auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); }
+    h2 { color: #0074cc; margin-bottom: 20px; }
+    .question { margin-bottom: 20px; }
+    .membership-options { display: flex; flex-direction: column; gap: 15px; margin-top: 20px; }
+    .option { padding: 15px; border-radius: 8px; color: white; font-weight: bold; cursor: pointer; transition: transform 0.2s; white-space: pre-line; }
+    .option:hover { transform: scale(1.02); }
+    .junior { background-color: #5cb85c; }
+    .youth { background-color: #f0ad4e; }
+    .adult { background-color: #0074cc; }
+    .joint { background-color: #6f42c1; }
+    .employee { background-color: #20c997; }
+    .activage { background-color: #d9534f; }
+    .hidden { display: none; }
+    label { display: block; margin-bottom: 5px; }
+    input[type="date"] { padding: 8px; width: 100%; max-width: 250px; }
+    button { padding: 10px 20px; background-color: #0074cc; color: white; border: none; border-radius: 5px; cursor: pointer; margin-top: 10px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Find the Right Membership</h2>
+    <div class="question">
+      <label for="dob">Enter your Date of Birth:</label>
+      <input type="date" id="dob" />
+    </div>
+
+    <div class="question hidden" id="residentCheck">
+      <label>Do you live in South Lanarkshire?</label>
+      <label><input type="radio" name="residency" value="yes"> Yes</label>
+      <label><input type="radio" name="residency" value="no"> No</label>
+    </div>
+
+    <div class="question hidden" id="soloJointCheck">
+      <label>Is this membership just for you, or for you plus someone else?</label>
+      <label><input type="radio" name="soloJoint" value="solo"> Just me</label>
+      <label><input type="radio" name="soloJoint" value="joint"> Me + someone else</label>
+    </div>
+
+    <button onclick="processDOB()">See Membership Options</button>
+
+    <div class="membership-options hidden" id="options"></div>
+  </div>
+
+  <script>
+    function getAge(dob) {
+      const birthDate = new Date(dob);
+      const today = new Date();
+      let age = today.getFullYear() - birthDate.getFullYear();
+      const m = today.getMonth() - birthDate.getMonth();
+      if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+      }
+      return age;
+    }
+
+    function processDOB() {
+      const dob = document.getElementById("dob").value;
+      if (!dob) return alert("Please enter your date of birth.");
+
+      const age = getAge(dob);
+      const optionsDiv = document.getElementById("options");
+      const residentCheck = document.getElementById("residentCheck");
+      const soloJointCheck = document.getElementById("soloJointCheck");
+
+      optionsDiv.innerHTML = "";
+      optionsDiv.classList.add("hidden");
+      residentCheck.classList.add("hidden");
+      soloJointCheck.classList.add("hidden");
+
+      if (age >= 4 && age <= 11) {
+        addOption("Health & Fit Junior", "£X.XX/month", "junior");
+        optionsDiv.classList.remove("hidden");
+      } else if (age >= 12 && age <= 15) {
+        addOption("Health & Fit Youth", "£X.XX/month\n(Gym induction required)", "youth");
+        optionsDiv.classList.remove("hidden");
+      } else if (age >= 16 && age < 60) {
+        soloJointCheck.classList.remove("hidden");
+        document.querySelectorAll('input[name="soloJoint"]').forEach(el => {
+          el.addEventListener("change", () => {
+            optionsDiv.innerHTML = "";
+            if (el.value === "solo") {
+              addOption("Health & Fit Adult", "£28.50/month", "adult");
+              addOption("Employee Membership", "£24.40/month", "employee");
+              addOption("Adult Concession", "£21.40/month", "adult");
+            } else {
+              addOption("Health & Fit Joint", "£51.30/month", "joint");
+              addOption("Joint Concession", "£38.50/month", "joint");
+            }
+            optionsDiv.classList.remove("hidden");
+          });
+        });
+      } else if (age >= 60) {
+        residentCheck.classList.remove("hidden");
+        document.querySelectorAll('input[name="residency"]').forEach(el => {
+          el.addEventListener("change", () => {
+            optionsDiv.innerHTML = "";
+            if (el.value === "yes") {
+              addOption("Activage (60+ Resident)", "Free", "activage");
+            } else {
+              addOption("Health & Fit 60+ (Non-Resident)", "£14.25/month", "adult");
+            }
+            optionsDiv.classList.remove("hidden");
+          });
+        });
+      }
+    }
+
+    function addOption(title, price, styleClass) {
+      const optionsDiv = document.getElementById("options");
+      const div = document.createElement("div");
+      div.className = `option ${styleClass}`;
+      div.innerText = `${title}\n${price}`;
+      optionsDiv.appendChild(div);
+    }
+  </script>
+</body>
+</html>
